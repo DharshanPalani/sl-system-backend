@@ -3,9 +3,9 @@ import registerUser from '../modules/registerUser.js';
 import loginUser from '../modules/loginUser.js';
 import checkUser from '../modules/checkUser.js';
 
-const router = express.Router();
+const authRoute = express.Router();
 
-router.post('/register', async (req, res) => {
+authRoute.post('/register', async (req, res) => {
     try {
         const { username, password } = req.body;
         const message = await registerUser(username, password);
@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-router.post('/login', async (req, res) => {
+authRoute.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
         const data = await loginUser(username, password);
@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.post('/checkUser', async (req, res) => {
+authRoute.post('/checkUser', async (req, res) => {
     try {
         const { username } = req.body;
         const exists = await checkUser(username);
@@ -35,4 +35,4 @@ router.post('/checkUser', async (req, res) => {
     }
 });
 
-export default router;
+export default authRoute;
