@@ -6,6 +6,8 @@ dotenv.config();
 const mongoURI = process.env.MONGO_URI;
 const dbName = process.env.DB_NAME;
 
+export const DB_NAME = "users";
+
 if (!mongoURI) {
     throw new Error("MONGO_URI is not defined. Check your .env file.");
 }

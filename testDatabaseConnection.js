@@ -5,7 +5,7 @@ import ora from 'ora';
 const success = (msg) => console.log(chalk.green(`✔ ${msg}`));
 const error = (msg) => console.log(chalk.red(`✖ ${msg}`));
 
-const collectionName = 'userDetails';
+const collectionName = 'users';
 
 const checkAndCreateCollection = async (db) => {
     const spin = ora(`Checking for ${collectionName} collection...`).start();
@@ -47,6 +47,8 @@ const checkConnection = async () => {
     } catch (err) {
         spin.fail('DB connection failed.');
         error(err.message);
+    } finally {
+        process.exit(0);
     }
 };
 
