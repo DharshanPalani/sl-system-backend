@@ -3,18 +3,17 @@ import db from '../config/db.js';
 
 const verifyPassword = (username, password) => {
     return new Promise((resolve, reject) => {
-        db.query("SELECT password FROM userDetails WHERE username = ?", [username], (err, results) => {
+        db.collection("userDetails").findOne({ username }, (err, user) => {
             if (err) {
-                console.error("MySQL Query Error:", err.message);
+                console.error("MongoDB Query Error:", err.message);
                 return reject(new Error("Database error"));
             }
 
-            if (!results || results.length === 0) {
+            if (!user) {
                 return resolve(false);
             }
 
-            const hashedPassword = results[0].password;
-            resolve(bcrypt.compareSync(password, hashedPassword));
+            resolve(bcrypt.compareSync(password, user.password));
         });
     });
 };
