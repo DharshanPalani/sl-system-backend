@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node server.js",
-    "connection": "node testDatabaseConnection.js"
+    "server": "bun server.js",
+    "connection": "bun testDatabaseConnection.js"
   },
   "keywords": [],
   "author": "",
@@ -22,7 +22,15 @@
     "figlet": "^1.8.0",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.1",
     "mysql2": "^3.12.0",
     "ora": "^8.2.0"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   }
 }
