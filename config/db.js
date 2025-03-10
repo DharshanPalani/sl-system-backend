@@ -1,16 +1,24 @@
-import mysql from 'mysql2';
-import dotenv from 'dotenv';
+import { MongoClient } from "mongodb";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
+const client = new MongoClient(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 });
 
-export default db;
+let db;
+
+const connectDB = async () => {
+    try {
+        await client.connect();
+        db = client.db(process.env.DB_NAME);
+        console.log("🔥 MongoDB Connected");
+    } catch (err) {
+        console.error("MongoDB Connection Error:", err);
+        process.exit(1);
+    }
+};
+
+export { connectDB, db };

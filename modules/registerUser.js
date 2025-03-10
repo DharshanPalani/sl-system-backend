@@ -4,7 +4,8 @@ import storeUser from './storeUser.js';
 
 const registerUser = async (username, password) => {
     if (await checkUser(username)) throw new Error("Username already exists.");
-    const hashedPassword = hashPassword(password);
+    
+    const hashedPassword = await hashPassword(password);
     return await storeUser(username, hashedPassword);
 };
 
