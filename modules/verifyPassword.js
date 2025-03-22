@@ -1,21 +1,19 @@
-import bcrypt from 'bcrypt';
-import {db, DB_NAME} from '../config/db.js';
+import bcrypt from "bcryptjs";
+import { pool } from "../config/db.js";
 
-const verifyPassword = (username, password) => {
-    return new Promise((resolve, reject) => {
-        db.collection(DB_NAME).findOne({ username }, (err, user) => {
-            if (err) {
-                console.error("MongoDB Query Error:", err.message);
-                return reject(new Error("Database error"));
-            }
+const verifyPassword_QUERY = "SELECT password FROM users WHERE username = $1";
 
-            if (!user) {
-                return resolve(false);
-            }
+const verifyPassword = async (username, password) => {
+    try {
+        const result = await pool.query(verifyPassword_QUERY, [username]);
+        if (result.rowCount === 0) return false;
 
-            resolve(bcrypt.compareSync(password, user.password));
-        });
-    });
+        const user = result.rows[0];
+        return bcrypt.compareSync(password, user.password);
+    } catch (error) {
+        console.error("Database query error:", error.message);
+        throw new Error("Database error");
+    }
 };
 
 export default verifyPassword;

@@ -2,12 +2,14 @@
   "name": "planmate-backendauth",
   "version": "1.0.0",
   "type": "module",
-  "description": "",
+  "description": "To install dependencies:",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "bun server.js",
-    "connection": "bun testDatabaseConnection.js"
+    "server": "node server.js",
+    "connection": "node testDatabaseConnection.js",
+    "start": "node server.js",
+    "db": "node db-cli.js"
   },
   "keywords": [],
   "author": "",
@@ -24,7 +26,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.1",
     "mysql2": "^3.12.0",
-    "ora": "^8.2.0"
+    "ora": "^8.2.0",
+    "pg": "^8.14.1",
+    "readline-sync": "^1.4.10"
   },
   "private": true,
   "devDependencies": {
@@ -32,5 +36,13 @@
   },
   "peerDependencies": {
     "typescript": "^5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DharshanPalani/sl-system-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DharshanPalani/sl-system-backend/issues"
+  },
+  "homepage": "https://github.com/DharshanPalani/sl-system-backend#readme"
 }
