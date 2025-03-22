@@ -1,21 +1,24 @@
-import {db, DB_NAME} from '../config/db.js';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import { pool } from "../config/db.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-const loginUser = (username, password) => {
-    return new Promise((resolve, reject) => {
-        db.collection(DB_NAME).findOne({ username }, async (err, user) => {
-            if (err) return reject(err);
-            if (!user) return reject(new Error('User not found'));
+const loginUser_QUERY = "SELECT id, username, password FROM users WHERE username = $1";
 
-            const isMatch = await bcrypt.compare(password, user.password);
-            if (!isMatch) return reject(new Error('Invalid password'));
+const loginUser = async (username, password) => {
+    try {
+        const result = await pool.query(loginUser_QUERY, [username, password]);
+        if (result.rowCount == 0) throw new Error("User not found");
 
-            const token = jwt.sign({ userId: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const user = result.rows[0];
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) throw new Error("Invalid password");
 
-            resolve({ message: 'Login successful', token });
-        });
-    });
-};
+        const token = jwt.sign({ userID: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+        return { message: "Login successful!", token };
+    } catch (error) {
+        throw new Error("Database query failed " + error);
+    }
+}
 
 export default loginUser;

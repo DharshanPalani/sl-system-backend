@@ -1,15 +1,15 @@
-import {db, DB_NAME} from '../config/db.js';
+import { pool } from "../config/db.js";
 
-const storeUser = (username, hashedPassword) => {
-    return new Promise((resolve, reject) => {
-        db.collection(DB_NAME).insertOne({ username, password: hashedPassword }, (err, result) => {
-            if (err) {
-                console.error("MongoDB Insert Error:", err.message);
-                return reject(new Error("Failed to register user"));
-            }
-            resolve("User successfully registered.");
-        });
-    });
+const storeUser_QUERY = "INSERT INTO users (username, password) value ($1, $2)";
+
+const storeUser = async (username, hashedPassword) => {
+    try {
+        await pool.query(storeUser_QUERY, [username, hashedPassword]);
+        return "User successfully stored";
+    } catch (error) {
+        throw new Error("Failed to register " + error);
+    }
+
 };
 
 export default storeUser;
